@@ -7,7 +7,7 @@ export default defineConfig({
   base: "./",
   server: {
     proxy: {
-      "/api": "http://localhost:33000", // API 요청을 백엔드로 프록시
+      "/api": "http://0:0:0:0:33000", // API 요청을 백엔드로 프록시
     },
   },
 });

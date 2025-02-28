@@ -136,4 +136,4 @@ app.get("*", (req, res) => {
 });
 
 const PORT = process.env.PORT || 33000;
-app.listen(PORT, () => console.log(`✅ 서버 실행: http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`✅ 서버 실행: http://0.0.0.0:${PORT}`));
