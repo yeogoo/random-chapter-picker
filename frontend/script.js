@@ -1,0 +1,119 @@
+const globalFunctions = {
+    async getChapter() {
+        try {
+            const res = await fetch("/api/random-chapter");
+            const data = await res.json();
+            const chapterElement = document.getElementById("chapter");
+            const chapter = data.chapter;
+            chapterElement.dataset.id = data.chapter.id;
+            chapterElement.innerText =
+                `${chapter.subject}-${chapter.chapter_no}: ${chapter.title} (${chapter.book_type})`;
+        } catch (error) {
+            console.error("API 요청 실패:", error);
+            document.getElementById("chapter").innerText = "데이터를 불러올 수 없습니다.";
+        }
+    },
+
+    async addChapter(event) {
+        event.preventDefault();
+    
+        const subject = document.getElementById("subjectInput").value.trim();
+        const chapter_no = document.getElementById("chapterNoInput").value.trim();
+        const title = document.getElementById("titleInput").value.trim();
+        const book_type = document.getElementById("book_type").value.trim();
+    
+        if (!subject || !chapter_no || !title || chapter_no <= 0 || !book_type) {
+            alert("모든 필드를 올바르게 입력하세요.");
+            return;
+        }
+    
+        try {
+            const res = await fetch("/api/add-chapter", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ subject, chapter_no, title, book_type }),
+            });
+    
+            const data = await res.json();
+            if (res.ok) {
+                alert("새로운 챕터가 추가되었습니다!");
+                document.getElementById("subjectInput").value = "";
+                document.getElementById("chapterNoInput").value = "";
+                document.getElementById("titleInput").value = "";
+            } else {
+                alert("챕터 추가 실패: " + data.error);
+            }
+        } catch (error) {
+            console.error("챕터 추가 중 오류 발생:", error);
+            alert("서버 오류로 챕터를 추가할 수 없습니다.");
+        }
+    },
+    async markAsStudied() {
+        const chapterId = document.getElementById("chapter").dataset.id;
+        if (!chapterId) return alert("선택된 챕터가 없습니다.");
+
+        try {
+            const res = await fetch("/api/mark-as-studied", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: chapterId }),
+            });
+            const data = await res.json();
+            alert(data.message);
+            getChapter(); // 📌 학습 완료 후 새로운 챕터 가져오기
+        } catch (error) {
+            console.error("학습 완료 실패:", error);
+        }
+    },
+    async loadChapters() {
+        try {
+            const res = await fetch("/api/chapters");
+            const data = await res.json();
+    
+            const chapterList = document.getElementById("chapterList");
+            chapterList.innerHTML = ""; // 기존 목록 초기화
+    
+            data.chapters.forEach(chapter => {
+                const row = document.createElement("tr");
+    
+                const subjectCell = document.createElement("td");
+                subjectCell.innerText = chapter.subject;
+                row.appendChild(subjectCell);
+    
+                const chapterNoCell = document.createElement("td");
+                chapterNoCell.innerText = chapter.chapter_no;
+                row.appendChild(chapterNoCell);
+    
+                const titleCell = document.createElement("td");
+                titleCell.innerText = chapter.title;
+                row.appendChild(titleCell);
+    
+                const bookTypeCell = document.createElement("td");
+                bookTypeCell.innerText = chapter.book_type;
+                row.appendChild(bookTypeCell);
+    
+                const reviewCountCell = document.createElement("td");
+                reviewCountCell.innerText = chapter.review_count;
+                row.appendChild(reviewCountCell);
+    
+                const lastReviewedCell = document.createElement("td");
+                lastReviewedCell.innerText = chapter.last_reviewed ? new Date(chapter.last_reviewed).toLocaleDateString() : "-";
+                row.appendChild(lastReviewedCell);
+    
+                chapterList.appendChild(row);
+            });
+    
+        } catch (error) {
+            console.error("챕터 목록 불러오기 실패:", error);
+        }
+    }
+}
+// 📌 window 객체에 모든 함수를 자동 등록
+Object.keys(globalFunctions).forEach(fnName => {
+    window[fnName] = globalFunctions[fnName];
+});
+document.getElementById("addChapterForm").addEventListener("submit", addChapter);    
+document.getElementById("refreshButton").addEventListener("click", loadChapters);
+
+globalFunctions.getChapter(); // 페이지 로드 시 챕터 가져오기
+globalFunctions.loadChapters();
