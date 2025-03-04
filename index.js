@@ -59,7 +59,7 @@ async function sendKakaoMessage() {
       buttons: [
         {
           title: "📖 다른 챕터 보기",
-          link: {mobile_web_url: `${process.env.RCP_DOMAIN}/random-chapter`, web_url: `${process.env.RCP_DOMAIN}/random-chapter`},
+          link: {mobile_web_url: `${process.env.RCP_DOMAIN}`, web_url: `${process.env.RCP_DOMAIN}`},
         },
         {
           title: "✅ 공부 완료",
