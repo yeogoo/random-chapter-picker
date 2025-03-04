@@ -59,11 +59,11 @@ async function sendKakaoMessage() {
       buttons: [
         {
           title: "📖 챕터 보기",
-          link: {web_url: `${process.env.RCP_DOMAIN}/api/mark-as-studied?chapterId=${chapter.id}`},
+          link: {mobile_web_url: `${process.env.RCP_DOMAIN}/api/mark-as-studied?chapterId=${chapter.id}`, web_url: `${process.env.RCP_DOMAIN}/api/mark-as-studied?chapterId=${chapter.id}`},
         },
         {
           title: "✅ 공부 완료",
-          link: {web_url: `${process.env.RCP_DOMAIN}/api/mark-as-studied?chapterId=${chapter.id}`},
+          link: {mobile_web_url: `${process.env.RCP_DOMAIN}/api/mark-as-studied?chapterId=${chapter.id}`, web_url: `${process.env.RCP_DOMAIN}/api/mark-as-studied?chapterId=${chapter.id}`},
         },
       ],
     };
