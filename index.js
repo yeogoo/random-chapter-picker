@@ -53,17 +53,17 @@ async function sendKakaoMessage() {
       object_type: "text",
       text: `📖 오늘의 랜덤 공부 챕터!\n${chapter.subject} - ${chapter.chapter_no}: ${chapter.title}\n(${chapter.book_type})`,
       link: {
-        web_url: `http://${process.env.RCP_IP}:${process.env.RCP_PORT}`,
-        mobile_web_url: `http://${process.env.RCP_IP}:${process.env.RCP_PORT}`
+        web_url: `${process.env.RCP_DOMAIN}`,
+        mobile_web_url: `${process.env.RCP_DOMAIN}`
         },
       buttons: [
         {
           title: "📖 챕터 보기",
-          link: {web_url: `http://${process.env.RCP_IP}:${process.env.RCP_PORT}/api/mark-as-studied/${chapter.id}`},
+          link: {web_url: `${process.env.RCP_DOMAIN}/api/mark-as-studied/${chapter.id}`},
         },
         {
           title: "✅ 공부 완료",
-          link: {web_url: `http://${process.env.RCP_IP}:${process.env.RCP_PORT}/api/mark-as-studied/${chapter.id}`},
+          link: {web_url: `${process.env.RCP_DOMAIN}/api/mark-as-studied/${chapter.id}`},
         },
       ],
     };
