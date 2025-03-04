@@ -76,28 +76,39 @@ const globalFunctions = {
             data.chapters.forEach(chapter => {
                 const row = document.createElement("tr");
     
+                let reviewCount = chapter.review_count;
+                let bgColor = reviewCount === 0 ? "bg-gray-50" : `bg-blue-${Math.min(100 + reviewCount * 100, 900)}`;
+                console.log(reviewCount, bgColor);
+                row.classList.add(bgColor, "text-gray-800");
+    
                 const subjectCell = document.createElement("td");
                 subjectCell.innerText = chapter.subject;
+                subjectCell.classList.add("p-4", "border");
                 row.appendChild(subjectCell);
     
                 const chapterNoCell = document.createElement("td");
                 chapterNoCell.innerText = chapter.chapter_no;
+                chapterNoCell.classList.add("p-4", "border");
                 row.appendChild(chapterNoCell);
     
                 const titleCell = document.createElement("td");
                 titleCell.innerText = chapter.title;
+                titleCell.classList.add("p-4", "border");
                 row.appendChild(titleCell);
     
                 const bookTypeCell = document.createElement("td");
                 bookTypeCell.innerText = chapter.book_type;
+                bookTypeCell.classList.add("p-4", "border");
                 row.appendChild(bookTypeCell);
     
                 const reviewCountCell = document.createElement("td");
                 reviewCountCell.innerText = chapter.review_count;
+                reviewCountCell.classList.add("p-4", "border");
                 row.appendChild(reviewCountCell);
     
                 const lastReviewedCell = document.createElement("td");
                 lastReviewedCell.innerText = chapter.last_reviewed ? new Date(chapter.last_reviewed).toLocaleDateString() : "-";
+                lastReviewedCell.classList.add("p-4", "border");
                 row.appendChild(lastReviewedCell);
     
                 chapterList.appendChild(row);

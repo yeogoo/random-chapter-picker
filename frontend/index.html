@@ -4,42 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>랜덤 챕터 피커</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/preline/dist/preline.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gradient-to-r from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center">
-    <div class="max-w-4xl w-full mx-auto bg-white p-10 rounded-2xl shadow-xl border border-gray-200">
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center">
+    <div class="max-w-4xl w-full mx-auto bg-white p-10 rounded-3xl shadow-xl border border-gray-200">
         <h1 class="text-4xl font-extrabold text-center text-blue-700 mb-8">📚 랜덤 챕터 피커</h1>
         
-        <div class="text-center mb-8 p-6 bg-blue-50 rounded-xl shadow-md border border-blue-200">
+        <div class="text-center mb-8 p-6 bg-blue-50 rounded-2xl shadow-md border border-blue-200">
             <p id="chapter" class="text-2xl text-gray-800 font-semibold">로딩 중...</p>
-            <div class="mt-6 flex justify-center gap-6">
-                <button onclick="getChapter()" class="btn btn-primary px-8 py-3 text-lg font-semibold">🎲 새로운 챕터 선택</button>
-                <button id="studyButton" onclick="markAsStudied()" class="btn btn-success px-8 py-3 text-lg font-semibold">✅ 학습 완료</button>
+            <div class="mt-6 flex justify-center gap-4">
+                <button onclick="getChapter()" class="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition">🎲 새로운 챕터 선택</button>
+                <button id="studyButton" onclick="markAsStudied()" class="px-6 py-3 bg-green-600 text-white text-lg font-semibold rounded-lg hover:bg-green-700 transition">✅ 학습 완료</button>
             </div>
         </div>
         
         <hr class="my-8 border-gray-300">
 
         <h2 class="text-3xl font-bold text-blue-700 mb-4">➕ 새로운 챕터 추가</h2>
-        <form id="addChapterForm" class="mt-4 space-y-4 p-6 bg-gray-50 rounded-xl shadow-md border border-gray-200">
-            <input type="text" id="subjectInput" placeholder="과목명을 입력하세요" required class="form-input w-full text-lg p-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400">
-            <input type="number" id="chapterNoInput" placeholder="챕터 번호 (자연수)" required min="1" class="form-input w-full text-lg p-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400">
-            <input type="text" id="titleInput" placeholder="챕터 제목을 입력하세요" required class="form-input w-full text-lg p-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400">
+        <form id="addChapterForm" class="mt-4 space-y-4 p-6 bg-gray-50 rounded-2xl shadow-md border border-gray-200">
+            <input type="text" id="subjectInput" placeholder="과목명을 입력하세요" required class="w-full text-lg p-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400">
+            <input type="number" id="chapterNoInput" placeholder="챕터 번호 (자연수)" required min="1" class="w-full text-lg p-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400">
+            <input type="text" id="titleInput" placeholder="챕터 제목을 입력하세요" required class="w-full text-lg p-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400">
             
-            <select id="book_type" required class="form-select w-full text-lg p-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400">
+            <select id="book_type" required class="w-full text-lg p-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400">
                 <option value="객관식">객관식</option>
                 <option value="기본서">기본서</option>
                 <option value="연습서">연습서</option>
             </select>
             
-            <button type="submit" class="btn btn-primary w-full text-lg py-4 font-semibold">📥 챕터 추가</button>
+            <button type="submit" class="w-full text-lg py-4 font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition">📥 챕터 추가</button>
         </form>
         
         <hr class="my-8 border-gray-300">
         
         <h2 class="text-3xl font-bold text-blue-700 mb-4">📖 챕터 목록</h2>
-        <div class="overflow-x-auto mt-4 p-6 bg-white rounded-xl shadow-md border border-gray-200">
-            <table class="table w-full border border-gray-300 rounded-lg overflow-hidden text-lg">
+        <div class="overflow-x-auto mt-4 p-6 bg-white rounded-2xl shadow-md border border-gray-200">
+            <table class="w-full border border-gray-300 rounded-lg overflow-hidden text-lg">
                 <thead>
                     <tr class="bg-blue-200 text-gray-800">
                         <th class="p-4 border">과목명</th>
@@ -56,7 +56,7 @@
             </table>
         </div>
         
-        <button id="refreshButton" class="mt-8 w-full btn btn-secondary text-lg py-4 font-semibold">🔄 새로고침</button>
+        <button id="refreshButton" class="mt-8 w-full text-lg py-4 font-semibold rounded-lg bg-gray-600 text-white hover:bg-gray-700 transition">🔄 새로고침</button>
     </div>
     
     <script type="module" src="/script.js"></script>

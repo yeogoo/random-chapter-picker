@@ -77,8 +77,9 @@ app.get("/api/chapters", async (req, res) => {
     const { data, error } = await supabase
         .from("chapters")
         .select("*")
-        .order("id", { ascending: true }) // 📌 회독수가 적은 챕터 우선 선택
+        .order("review_count", { ascending: true }) // 📌 회독수가 적은 챕터 우선 선택
         .order("last_reviewed", { ascending: true }) // 📌 동일한 경우, 가장 오래된 학습 챕터 선택
+        .order("id", {ascending: true})
         ;
 
     // if (error) return res.status(500).json({ error: error.message });
@@ -108,7 +109,35 @@ app.get("/api/mark-as-studied", async (req, res) => {
         const data = await response.json();
         console.log(data);
 
-        res.json({ chapters: data });
+        const chapter = data.updatedChapter;
+        
+        const htmlResponse = `
+        <!DOCTYPE html>
+        <html lang="ko">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>학습 완료</title>
+            <script src="https://cdn.tailwindcss.com"></script>
+        </head>
+        <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center">
+            <div class="max-w-xl w-full mx-auto bg-white p-10 rounded-3xl shadow-xl border border-gray-200 text-center">
+                <h1 class="text-3xl font-extrabold text-blue-700 mb-6">✅ 학습 완료</h1>
+                <p class="text-lg text-gray-800 font-semibold">${data.message}</p>
+                <div class="mt-6 p-6 bg-blue-50 rounded-2xl shadow-md border border-blue-200">
+                    <p class="text-xl text-gray-900 font-semibold">📖 ${chapter.subject} - ${chapter.chapter_no}장</p>
+                    <p class="text-lg text-gray-700 mt-2">${chapter.title}</p>
+                    <p class="text-sm text-gray-500 mt-4">회독수: ${chapter.review_count}</p>
+                    <p class="text-sm text-gray-500">마지막 학습일: ${chapter.last_reviewed}</p>
+                </div>
+                <div class="mt-6">
+                    <a href="/" class="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition">🏠 홈으로</a>
+                </div>
+            </div>
+        </body>
+        </html>`;
+
+        res.status(200).send(htmlResponse);
 
     } catch (error) {
         console.error("API 요청 중 오류 발생:", error);
