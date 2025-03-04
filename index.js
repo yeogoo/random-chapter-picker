@@ -1,6 +1,7 @@
 // const {onSchedule} = require("firebase-functions/v2/scheduler");
 const express = require("express");
 const axios = require("axios");
+require("dotenv").config();
 
 const app = express();
 const HOST = "0.0.0.0";
@@ -18,9 +19,9 @@ async function refreshAccessToken() {
     const response = await axios.post("https://kauth.kakao.com/oauth/token", null, {
       params: {
         grant_type: "refresh_token",
-        client_id: "a853f794eb3b75a55ada21b127c57055",
-        client_secret: "7JV4dL6oCEU6z3guAZuWrHaY8isquQaU",
-        refresh_token: "KRr6FYx54JYcbT34OXG2PHDFMWgxRMD7AAAAAgoqJVMAAAGVS23JhOQ1KlcE_6bt",
+        client_id: process.env.KAKAO_CLIENT_ID,
+        client_secret: process.env.KAKAO_CLIENT_SECRET,
+        refresh_token: process.env.KAKAO_REFRESH_TOKEN,
       },
     });
 
@@ -59,7 +60,7 @@ async function sendKakaoMessage() {
         },
         {
           title: "✅ 공부 완료",
-          link: {web_url: "http://http://183.111.181.133:8080/"},
+          link: {web_url: `${process.env.KAKAO_CLIENT_ID}:${process.env.PORT}/api/mark-as-studied/${chapter.id}`},
         },
       ],
     };
