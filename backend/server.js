@@ -16,6 +16,46 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY
 app.use(express.static(path.join(__dirname, "public")));
 
 // 랜덤 챕터 API
+app.get("/random-chapter", async (req, res) => {
+    const { data, error } = await supabase
+        .from("min_review_count_chapters")
+        .select("*")
+        .order("last_reviewed", { ascending: true }) // 📌 동일한 경우, 가장 오래된 학습 챕터 선택
+        ;
+
+    if (error) return res.status(500).json({ error: error.message });
+    const randomChapter = data[Math.floor(Math.random() * data.length)];
+
+    const htmlResponse = `
+       <!DOCTYPE html>
+        <html lang="ko">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>랜덤 챕터</title>
+            <script src="https://cdn.tailwindcss.com"></script>
+        </head>
+        <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center">
+            <div class="max-w-xl w-full mx-auto bg-white p-10 rounded-3xl shadow-xl border border-gray-200 text-center">
+                <h1 class="text-3xl font-extrabold text-blue-700 mb-6">📚 랜덤 챕터</h1>
+                <div class="mt-6 p-6 bg-blue-50 rounded-2xl shadow-md border border-blue-200">
+                    <p class="text-xl text-gray-900 font-semibold">📖 ${randomChapter.subject} - ${randomChapter.chapter_no}장</p>
+                    <p class="text-lg text-gray-700 mt-2">${randomChapter.title}</p>
+                    <p class="text-sm text-gray-500 mt-4">회독수: ${randomChapter.review_count}</p>
+                    <p class="text-sm text-gray-500">마지막 학습일: ${new Date(randomChapter.last_reviewed).toLocaleString("ko-KR")}</p>
+                </div>
+                <div class="mt-6 flex justify-center space-x-4">
+                    <a href="/" class="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition">🏠 홈으로</a>
+                    <a href="/random-chapter" class="px-6 py-3 bg-green-600 text-white text-lg font-semibold rounded-lg hover:bg-green-700 transition">🔄 다시 한번 더</a>
+                </div>
+            </div>
+        </body>
+        </html>
+        `;
+
+    res.status(200).send(htmlResponse);
+});
+
 app.get("/api/random-chapter", async (req, res) => {
     const { data, error } = await supabase
         .from("min_review_count_chapters")
@@ -89,7 +129,7 @@ app.get("/api/chapters", async (req, res) => {
     res.json({ chapters: data });
 });
 
-app.get("/api/mark-as-studied", async (req, res) => {
+app.get("/mark-as-studied", async (req, res) => {
     const { chapterId } = req.query;
     console.log(chapterId);
     if (!chapterId) {

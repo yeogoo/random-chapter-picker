@@ -1,4 +1,5 @@
 const globalFunctions = {
+
     async getChapter() {
         try {
             const res = await fetch("/api/random-chapter");
@@ -48,7 +49,7 @@ const globalFunctions = {
             alert("서버 오류로 챕터를 추가할 수 없습니다.");
         }
     },
-    async markAsStudied() {
+    async markAsStudied() {        
         const chapterId = document.getElementById("chapter").dataset.id;
         if (!chapterId) return alert("선택된 챕터가 없습니다.");
 
@@ -78,7 +79,7 @@ const globalFunctions = {
     
                 let reviewCount = chapter.review_count;
                 let bgColor = reviewCount === 0 ? "bg-gray-50" : `bg-blue-${Math.min(100 + reviewCount * 100, 900)}`;
-                console.log(reviewCount, bgColor);
+                //console.log(reviewCount, bgColor);
                 row.classList.add(bgColor, "text-gray-800");
     
                 const subjectCell = document.createElement("td");
