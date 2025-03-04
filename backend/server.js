@@ -89,20 +89,32 @@ app.get("/api/chapters", async (req, res) => {
 });
 
 app.get("/api/mark-as-studied", async (req, res) => {
-    const {chapterId} = req.query;
+    const { chapterId } = req.query;
+    console.log(chapterId);
     if (!chapterId) {
-      return res.status(400).json({error: "❌ 챕터 ID가 필요합니다."});
-    } else {
-      const res = await fetch("/api/mark-as-studied", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({id: chapterId}),
-      });
-      const data = await res.json();
-      console.log(data);
-      res.json({chapters: data});
+        return res.status(400).json({ error: "❌ 챕터 ID가 필요합니다." });
     }
-  });
+    try {
+        const response = await fetch("http://localhost:8080/api/mark-as-studied", { // 절대 경로 사용
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: chapterId }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`API 요청 실패: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log(data);
+
+        res.json({ chapters: data });
+
+    } catch (error) {
+        console.error("API 요청 중 오류 발생:", error);
+        res.status(500).json({ error: "서버 내부 오류 발생" });
+    }
+});
   
 
 app.post("/api/mark-as-studied", async (req, res) => {
