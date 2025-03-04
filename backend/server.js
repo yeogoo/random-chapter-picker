@@ -88,7 +88,22 @@ app.get("/api/chapters", async (req, res) => {
     res.json({ chapters: data });
 });
 
-
+app.get("/api/mark-as-studied", async (req, res) => {
+    const {chapterId} = req.query;
+    if (!chapterId) {
+      return res.status(400).json({error: "❌ 챕터 ID가 필요합니다."});
+    } else {
+      const res = await fetch("/api/mark-as-studied", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({id: chapterId}),
+      });
+      const data = await res.json();
+      console.log(data);
+      res.json({chapters: data});
+    }
+  });
+  
 
 app.post("/api/mark-as-studied", async (req, res) => {
     const { id } = req.body;
