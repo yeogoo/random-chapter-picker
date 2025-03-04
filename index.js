@@ -52,20 +52,23 @@ async function sendKakaoMessage() {
     const message = {
       object_type: "text",
       text: `📖 오늘의 랜덤 공부 챕터!\n${chapter.subject} - ${chapter.chapter_no}: ${chapter.title}\n(${chapter.book_type})`,
-      link: {web_url: "https://your-study-url.com"},
+      link: {
+        web_url: `http://${process.env.RCP_IP}:${process.env.RCP_PORT}`,
+        mobile_web_url: `http://${process.env.RCP_IP}:${process.env.RCP_PORT}`
+        },
       buttons: [
         {
           title: "📖 챕터 보기",
-          link: {web_url: `https://your-study-url.com/chapter/${chapter.chapter_no}`},
+          link: {web_url: `http://${process.env.RCP_IP}:${process.env.RCP_PORT}/api/mark-as-studied/${chapter.id}`},
         },
         {
           title: "✅ 공부 완료",
-          link: {web_url: `${process.env.KAKAO_CLIENT_ID}:${process.env.PORT}/api/mark-as-studied/${chapter.id}`},
+          link: {web_url: `http://${process.env.RCP_IP}:${process.env.RCP_PORT}/api/mark-as-studied/${chapter.id}`},
         },
       ],
     };
 
-    console.log(message);
+    console.log(JSON.stringify(message));
 
     const response = await axios.post("https://kapi.kakao.com/v2/api/talk/memo/default/send", {
       template_object: JSON.stringify(message),
