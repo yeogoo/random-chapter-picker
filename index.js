@@ -58,12 +58,12 @@ async function sendKakaoMessage() {
         },
       buttons: [
         {
-          title: "📖 다른 챕터",
-          link: {mobile_web_url: `${process.env.RCP_DOMAIN}/random-chapter`, web_url: `${process.env.RCP_DOMAIN}/api/random-chapter`},
+          title: "📖 다른 챕터 보기",
+          link: {mobile_web_url: `${process.env.RCP_DOMAIN}/random-chapter`, web_url: `${process.env.RCP_DOMAIN}/random-chapter`},
         },
         {
           title: "✅ 공부 완료",
-          link: {mobile_web_url: `${process.env.RCP_DOMAIN}/mark-as-studied?chapterId=${chapter.id}`, web_url: `${process.env.RCP_DOMAIN}/api/mark-as-studied?chapterId=${chapter.id}`},
+          link: {mobile_web_url: `${process.env.RCP_DOMAIN}/mark-as-studied?chapterId=${chapter.id}`, web_url: `${process.env.RCP_DOMAIN}/mark-as-studied?chapterId=${chapter.id}`},
         },
       ],
     };
