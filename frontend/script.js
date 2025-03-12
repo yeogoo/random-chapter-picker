@@ -73,7 +73,7 @@ const globalFunctions = {
     
             const chapterList = document.getElementById("chapterList");
             chapterList.innerHTML = ""; // 기존 목록 초기화
-    
+            
             data.chapters.forEach(chapter => {
                 const row = document.createElement("tr");
     
@@ -89,7 +89,7 @@ const globalFunctions = {
     
                 const chapterNoCell = document.createElement("td");
                 chapterNoCell.innerText = chapter.chapter_no;
-                chapterNoCell.classList.add("p-4", "border");
+                chapterNoCell.classList.add("p-4", "border", "hidden", "sm:table-cell");
                 row.appendChild(chapterNoCell);
     
                 const titleCell = document.createElement("td");
@@ -104,12 +104,12 @@ const globalFunctions = {
     
                 const reviewCountCell = document.createElement("td");
                 reviewCountCell.innerText = chapter.review_count;
-                reviewCountCell.classList.add("p-4", "border");
+                reviewCountCell.classList.add("p-4", "border", "hidden", "sm:table-cell");
                 row.appendChild(reviewCountCell);
     
                 const lastReviewedCell = document.createElement("td");
                 lastReviewedCell.innerText = chapter.last_reviewed ? new Date(chapter.last_reviewed).toLocaleDateString() : "-";
-                lastReviewedCell.classList.add("p-4", "border");
+                lastReviewedCell.classList.add("p-4", "border", "hidden", "sm:table-cell");
                 row.appendChild(lastReviewedCell);
     
                 chapterList.appendChild(row);
