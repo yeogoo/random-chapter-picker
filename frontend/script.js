@@ -79,12 +79,26 @@ const globalFunctions = {
     
                 let reviewCount = chapter.review_count;
                 let bgColor = reviewCount === 0 ? "bg-gray-50" : `bg-blue-${Math.min(100 + reviewCount * 100, 900)}`;
-                //console.log(reviewCount, bgColor);
                 row.classList.add(bgColor, "text-gray-800");
     
+                // const subjectCell = document.createElement("td");
+                // subjectCell.innerText = chapter.subject;
+                // subjectCell.classList.add("p-4", "border");
+                // row.appendChild(subjectCell);
+
                 const subjectCell = document.createElement("td");
-                subjectCell.innerText = chapter.subject;
                 subjectCell.classList.add("p-4", "border");
+
+                const fullSubject = document.createElement("span");
+                fullSubject.innerText = chapter.subject;
+                fullSubject.classList.add("hidden", "sm:inline"); // sm 이상에서 표시
+
+                const shortSubject = document.createElement("span");
+                shortSubject.innerText = chapter.subject.slice(0, 2);
+                shortSubject.classList.add("inline", "sm:hidden"); // sm 이하에서 표시
+
+                subjectCell.appendChild(fullSubject);
+                subjectCell.appendChild(shortSubject);
                 row.appendChild(subjectCell);
     
                 const chapterNoCell = document.createElement("td");
@@ -97,9 +111,30 @@ const globalFunctions = {
                 titleCell.classList.add("p-4", "border");
                 row.appendChild(titleCell);
     
+                // const bookTypeCell = document.createElement("td");
+                // bookTypeCell.innerText = chapter.book_type;
+                // bookTypeCell.classList.add("p-4", "border");
+                // row.appendChild(bookTypeCell);
+                    // 유형 (기본서 → 기)
                 const bookTypeCell = document.createElement("td");
-                bookTypeCell.innerText = chapter.book_type;
                 bookTypeCell.classList.add("p-4", "border");
+
+                const fullBookType = document.createElement("span");
+                fullBookType.innerText = chapter.book_type;
+                fullBookType.classList.add("hidden", "sm:inline"); // sm 이상에서 표시
+
+                // const shortBookType = document.createElement("span");
+                // shortBookType.innerText = chapter.book_type.charAt(0);
+                // shortBookType.classList.add("inline", "sm:hidden"); // sm 이하에서 표시
+                
+                const shortBookType = document.createElement("span");
+                shortBookType.innerText = chapter.book_type.charAt(0);
+                shortBookType.classList.add(
+                    "inline", "sm:hidden", "px-2", "py-1", "text-xs", "font-semibold", 
+                    "rounded-full", "bg-blue-100", "text-blue-600"
+                ); // sm 이하에서 배경 + 둥근 라벨 스타일 적용
+                bookTypeCell.appendChild(fullBookType);
+                bookTypeCell.appendChild(shortBookType);
                 row.appendChild(bookTypeCell);
     
                 const reviewCountCell = document.createElement("td");
