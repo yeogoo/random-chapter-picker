@@ -15,16 +15,47 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY
 // 📌 정적 파일 서빙 (빌드된 프론트엔드)
 app.use(express.static(path.join(__dirname, "public")));
 
+// 📌 랜덤 챕터 가져오는 함수 (중복 제거)
+async function getRandomChapter() {
+    const { data, error } = await supabase
+      .from("min_review_count_chapters")
+      .select("*");
+    
+    if (error) throw new Error(error.message);
+    if (data.length === 0) return null;
+    
+    const now = new Date();
+    const scaleFactor = 7; // 가중치의 증가 속도를 조정 (예: 7일 기준)
+    
+    // 각 챕터에 대해 지수 가중치 계산: Math.exp(diffDays / scaleFactor)
+    const chaptersWithWeights = data.map(chapter => {
+      const lastReviewed = chapter.last_reviewed ? new Date(chapter.last_reviewed) : new Date(0);
+      const diffDays = (now - lastReviewed) / (1000 * 60 * 60 * 24);
+      const weight = Math.exp(diffDays / scaleFactor);
+      return { ...chapter, weight };
+    });
+    
+    // 모든 챕터의 총 가중치 계산
+    const totalWeight = chaptersWithWeights.reduce((sum, chapter) => sum + chapter.weight, 0);
+    console.log(chaptersWithWeights);
+    let randomWeight = Math.random() * totalWeight;
+    
+    // 가중치 기반 랜덤 선택
+    for (const chapter of chaptersWithWeights) {
+      randomWeight -= chapter.weight;
+      if (randomWeight <= 0) {
+        return chapter;
+      }
+    }
+    
+    // 예외 처리: 마지막 챕터 반환
+    return chaptersWithWeights[chaptersWithWeights.length - 1];
+}
+
 // 랜덤 챕터 API
 app.get("/random-chapter", async (req, res) => {
-    const { data, error } = await supabase
-        .from("min_review_count_chapters")
-        .select("*")
-        .order("last_reviewed", { ascending: true }) // 📌 동일한 경우, 가장 오래된 학습 챕터 선택
-        ;
-
-    if (error) return res.status(500).json({ error: error.message });
-    const randomChapter = data[Math.floor(Math.random() * data.length)];
+    const randomChapter = await getRandomChapter();
+    if (!randomChapter) return res.status(404).send("랜덤 챕터를 찾을 수 없습니다.");
 
     const htmlResponse = `
        <!DOCTYPE html>
@@ -57,16 +88,14 @@ app.get("/random-chapter", async (req, res) => {
 });
 
 app.get("/api/random-chapter", async (req, res) => {
-    const { data, error } = await supabase
-        .from("min_review_count_chapters")
-        .select("*")
-        .order("last_reviewed", { ascending: true }) // 📌 동일한 경우, 가장 오래된 학습 챕터 선택
-        ;
+    try {
+        const randomChapter = await getRandomChapter();
+        if (!randomChapter) return res.status(404).json({ error: "랜덤 챕터를 찾을 수 없습니다." });
 
-    if (error) return res.status(500).json({ error: error.message });
-    const randomChapter = data[Math.floor(Math.random() * data.length)];
-
-    res.json({ chapter: randomChapter });
+        res.json({ chapter: randomChapter });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 app.get("/api/subjects", async (req, res) => {
